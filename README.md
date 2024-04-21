@@ -100,6 +100,7 @@ ORDER BY
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/having.png?raw=true)
 
 This does what we want. You'll see how we can get around using the HAVING clause a little later when looking at CTEs, but this is good knowledge to have.
+
 ## Joining Tables
 So far we've only been working with single tables. Let's look at joining some tables together and looking at the dataset that can be returned from both of them. For this example, we can go back to the `employee` table. Remember that the `employee` table had the employee details as well as their department. But to save space in the database, it's the id of the department that's listed against the employee rather than the name of the department. That's held in the `department` table. If we want to see each employee and the name of their department, we'll need to join the two tables together. Let's do that now:
 ```sql
@@ -175,6 +176,7 @@ The above will create a dataset that contains all first and last names for all e
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/union.png?raw=true)
 
 By default, a `UNION` produces a distinct set of data. For clarity, you can also write this as `UNION DISTINCT`. If you have an employee that is also a client, their name will only be listed once. If you want to see it listed twice (once from each table), you can use the UNION ALL query.
+
 ## CTEs and Subqueries
 As your queries become more complex, you will want to improve their structure for readability. Common Table Expressions (CTEs) and subqueries are powerful tools in SQL that can simplify complex queries, improve readability, and make your SQL scripts more maintainable. Below we can look into these in more depth.
 ### Common Table Expressions (CTEs)

@@ -1,3 +1,6 @@
+# Introduction to SQL: A Beginner's Guide
+This file aims to provide a straightforward introduction to SQL. Designed for simplicity, it's perfect for those just starting out. SQL is indispensable in roles such as Data Analyst and Data Engineer, offering a way to query data, configure database structures, and more. We will explore intermediate SQL functionalities including eliminating duplicates swith `DISTINCT`, leveraging `UNION`, and looking at CTEs and Subqueries. Let's dive in and build a solid foundation in SQL.
+
 ## Eliminating Duplicates
 We're getting a bit more advanced now. There are times when you might have a table, and you want to see what unique values exist in a column. There might be millions of records, but only a handful of unique values. For this, you can use the `DISTINCT` clause. This comes right at the top of the query before the column (or columns) that you want to look at.
 ```sql

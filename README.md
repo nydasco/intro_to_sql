@@ -11,13 +11,16 @@ First things first, let's take a look at what our database looks like, and get a
 - sale.
 
 These four tables are related to one another (hence the term 'relational database'). Below is the Entity Relationship Diagram (ERD) for the database:
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/erd.png?raw=true)
 Each box represents a table, and within it there are a list of the fields in that table, and the data types of those fields. If you've come from the world of spreadsheets, think of each of these as a tab within the spreadsheet, where the tabs are related to one another. An employee will have a `department_id` that identifies the department they are in. That `department_id` will correspond to the `id` in the `department` table, and that table then also contains the name of the department. That saves us needing to store the full department name against every employee, instead just storing a number. This allows us to save storage space in the database.
 
 ## Setting Up Your Database
 I'm going to use a website called [SQLiteOnline](https://sqliteonline.com/). It's free, and it allows you to set up a basic database and have a play with it. You don't need to set up an account, but make sure you've selected PostgreSQL from the left hand side:
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/screenshot_1.png?raw=true)
 You'll find copies of the four files that create and populate the four tables in this Github repository. You need to copy/paste the contents of each file in the create_table/ folder into the website, and hit the 'run' button:
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/create_table.png?raw=true)
 You'll end up with the four tables listed, as shown in my first screenshot.
 
@@ -30,6 +33,7 @@ FROM
     employee
 ```
 The * is a wildcard. It means 'all columns'. This will return all four columns in the employee table, with all of the details in the records in that table. Say you had 1,000 employees. This query would return a table that was 4 columns wide by 1,000 rows long. Generally using this wildcard is frowned upon. But I know plenty of people that use it daily.
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/select_star.png?raw=true)
 Let's trim this. We can trim both the width and the length. To trim the width, we need to replace our wildcard with the specific columns we're interesting in returning:
 ```sql
@@ -40,6 +44,7 @@ FROM
     employee
 ```
 We've only asked for two columns, so the other two - `id` and `department_id` won't be included in the returned results.
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/select.png?raw=true)
 But what if we only want to include those employees who had a `department_id` of '1'? We need to trim the length. That's where the WHERE clause comes in.
 ```sql
@@ -52,6 +57,7 @@ WHERE
     department_id = 1
 ```
 Now we've limited both the width and the length of the returned dataset. Nice!
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/select_where.png?raw=true)
 ## Grouping and Aggregating
 Let's step it up. We want to take a look at our sales data. There might be hundreds or thousands of sales on any given day. We want to see the total value of sales on each day. This is where we introduce a new clause. The `GROUP BY` clause. Things become a bit more advanced now, as we need to specify both what we want to group by (date), but also how we want to handle the thing that we're grouping (sale). In our case, we want to sum all of the sales on each date. I've also included an `ORDER BY` clause so that the data returns in date order:
@@ -66,6 +72,7 @@ GROUP BY
 ORDER BY
     date
 ```
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/group_by.png?raw=true)
 Rather than showing the hundreds or thousands of sales records for each day, it will now return a single row for each date with the sum of all sale amounts for that date next to it. We also introduced something else in the above query: the alias. We gave our sum a name. We called it `daily_sales`. When the dataset is returned, it will use our alias as the field name. So we'll have two fields - `date` and `daily_sales`.
 It's great that we've got this information now, but there may still be a lot of data returned. We only want to see the dates where the total sales were about $10,000. Initially you might think 'we can use the `WHERE` clause', but unfortunately not. The `WHERE` clause will only work on the base data in the table. To filter based on the result of grouping, we need to use the HAVING clause. Let's take a look:
@@ -82,6 +89,7 @@ HAVING
 ORDER BY
     date
 ```
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/having.png?raw=true)
 This does what we want. You'll see how we can get around using the HAVING clause a little later when looking at CTEs, but this is good knowledge to have.
 ## Joining Tables
@@ -99,6 +107,7 @@ FROM
 The first thing you'll notice is that now we're using more than one table, we start to fully qualify the names of the fields. Rather than just using the field name, we use the table.field. While in some circumstances this isn't needed, it is a good habit to get into. It makes it easy to see where your fields came from when you need to go back and debug your code.
 
 Secondly, we've got more information going on in our `FROM` statement. We've now got the table that we start with (the left table), but we've also joined it to a second table (the right table), and then defined what fields in both tables are related to one another. The `department_id` in the `employee` table should match to the `id` in the `department` table.
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/join.png?raw=true)
 ### Join Types
 In the above example, we've used an INNER JOIN. There are a number of different types of join, and they all work a little differently to each other. I've given a quick overview of each below:
@@ -131,6 +140,7 @@ FROM
     sale
 ```
 The above will list out the regions that sales have occurred in. If there are only 4regions there will only be 4 results, even if there are millions of sales records.
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/distinct.png?raw=true)
 ## Combining Results
 We've looked at joining tables together in a way that allows you to add columns from multiple tables to produce a wider dataset. But what if the tables have the same columns and you want to 'stack them' one on top of another to create a dataset that contains the combined data represented as more rows? For this, you can use the `UNION` statement.
@@ -151,6 +161,7 @@ FROM
     client
 ```
 The above will create a dataset that contains all first and last names for all employees and clients together.
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/union.png?raw=true)
 By default, a `UNION` produces a distinct set of data. For clarity, you can also write this as `UNION DISTINCT`. If you have an employee that is also a client, their name will only be listed once. If you want to see it listed twice (once from each table), you can use the UNION ALL query.
 ## CTEs and Subqueries
@@ -183,6 +194,7 @@ WHERE
     total_sales > 20000
 ```
 In this example, the CTE `RegionalSales` is used to calculate total sales by region, which is then referenced in the main query to filter regions greater than 20,000 in sales. This is a very simple example, which is an alternative to the above `HAVING` clause. But you can have multiple CTEs in a single query, and then bring them all together at the end with a number of joins in your final `SELECT` statement.
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/cte.png?raw=true)
 ### Subqueries
 Subqueries are queries nested inside another query. They can be used in various parts of a main SQL statement, including SELECT, FROM, and WHERE clauses.
@@ -207,6 +219,7 @@ FROM
     employee
 ```
 This example uses a subquery to count the number of sales for each employee directly in the SELECT clause.
+
 ![](https://github.com/nydasco/intro_to_sql/blob/main/images/subquery.png?raw=true)
 ## CTEs vs. Subqueries
 **When to Use Which?**

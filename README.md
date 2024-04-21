@@ -28,6 +28,6 @@ You'll find copies of the four files that create and populate the four tables in
 You'll end up with the four tables listed, as shown in my first screenshot.
 
 From here, follow the links below:
-- ([Basics](https://github.com/nydasco/intro_to_sql/blob/main/basic.md))
+- [Basics](https://github.com/nydasco/intro_to_sql/blob/main/basic.md)
 - Intermediate (WIP)
 - Advanced (Not Yet Started)
